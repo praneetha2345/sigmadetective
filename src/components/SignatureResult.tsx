@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { downloadSignatureReport } from '@/utils/reportGenerator';
 
 export interface SignatureResultData {
   isAuthentic: boolean;
@@ -16,9 +17,14 @@ export interface SignatureResultData {
 interface SignatureResultProps {
   result: SignatureResultData | null;
   className?: string;
+  onVerifyAnother?: () => void;
 }
 
-const SignatureResult: React.FC<SignatureResultProps> = ({ result, className }) => {
+const SignatureResult: React.FC<SignatureResultProps> = ({ 
+  result, 
+  className,
+  onVerifyAnother 
+}) => {
   if (!result) return null;
   
   const { isAuthentic, confidenceScore, matchDetails, referenceSignature } = result;
@@ -38,6 +44,11 @@ const SignatureResult: React.FC<SignatureResultProps> = ({ result, className }) 
     if (scorePercent >= 90) return 'bg-green-500';
     if (scorePercent >= 70) return 'bg-amber-500';
     return 'bg-red-500';
+  };
+
+  // Handle download report
+  const handleDownloadReport = () => {
+    downloadSignatureReport(result);
   };
 
   return (
@@ -101,10 +112,16 @@ const SignatureResult: React.FC<SignatureResultProps> = ({ result, className }) 
         )}
         
         <div className="mt-6 flex justify-center">
-          <button className="text-sm px-6 py-2 rounded-full glass-button mr-4">
+          <button 
+            className="text-sm px-6 py-2 rounded-full glass-button mr-4"
+            onClick={handleDownloadReport}
+          >
             Download Report
           </button>
-          <button className="text-sm px-6 py-2 rounded-full bg-primary text-white hover:bg-primary/90 transition-colors">
+          <button 
+            className="text-sm px-6 py-2 rounded-full bg-primary text-white hover:bg-primary/90 transition-colors"
+            onClick={onVerifyAnother}
+          >
             Verify Another
           </button>
         </div>

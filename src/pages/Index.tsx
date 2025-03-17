@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -41,6 +40,10 @@ const Index: React.FC = () => {
     }
   };
 
+  const resetAnalysis = () => {
+    setResult(null);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
@@ -69,7 +72,10 @@ const Index: React.FC = () => {
             />
             
             {result && (
-              <SignatureResult result={result} />
+              <SignatureResult 
+                result={result} 
+                onVerifyAnother={resetAnalysis} 
+              />
             )}
           </div>
           
